@@ -1,5 +1,5 @@
 {
-  "name": "movuino.js",
+  "name": "movuino",
   "version": "1.0.0",
   "engines": {
     "node": ">=7.6.0"
