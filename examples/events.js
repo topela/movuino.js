@@ -17,12 +17,10 @@ movuinojs.on("movuino", movuino => {
   console.log(movuino.id, "movuino");
 
   movuino.on("error", error => {
-    // Event
     console.error(movuino.id, "error", error); // Log
   });
 
   movuino.on("plugged", () => {
-    //Event
     console.log(movuino.id, "plugged"); // log etc...
   });
 

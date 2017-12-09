@@ -2,9 +2,9 @@
   "name": "movuino.js",
   "version": "1.0.0",
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=7.6.0"
   },
-  "repository": "git@github.com:topela/movuino.js.git",
+  "repository": "git@github.com:movuino/movuino.js.git",
   "license": "GPL-3.0",
   "scripts": {
     "test": "eslint ."

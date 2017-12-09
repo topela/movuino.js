@@ -31,7 +31,25 @@ program
         movuino.plugged ? chalk.green("✔") : chalk.red("✖")
       ]);
     });
-    console.log(table.toString());
+    process.stdout.write(table.toString() + "\n");
+    await movuinojs.unlisten();
+  });
+
+program
+  .command("connect [ssid] [password] [host]")
+  .description("connect movuinos to wifi")
+  .action(async (ssid, password, host) => {
+    await movuinojs.listen();
+    const { movuinos } = movuinojs;
+
+    await Promise.all(
+      movuinos.map(async movuino => {
+        await movuino.attachSerial();
+        await movuino.setWifi({ ssid, password, host });
+        await movuino.detachSerial();
+      })
+    );
+
     await movuinojs.unlisten();
   });
 

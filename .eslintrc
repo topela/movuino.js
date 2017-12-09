@@ -11,5 +11,6 @@ extends:
   - prettier
 
 rules:
+  capitalized-comments: 0
   # unicorn https://github.com/sindresorhus/eslint-plugin-unicorn
   unicorn/filename-case: 0
