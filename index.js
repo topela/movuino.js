@@ -7,17 +7,6 @@ const movuinos = require("./lib/movuinos");
 const usb = require("./lib/usb");
 const wifi = require("./lib/wifi");
 
-function getInterfaceAddress(iface) {
-  const interfaces = os.networkInterfaces();
-  // OS X
-  if (!iface) {
-    iface = "en0";
-  }
-  return interfaces[iface].find(({ internal, family }) => {
-    return !internal && family === "IPv4";
-  }).address;
-}
-
 module.exports = movuinos;
 
 module.exports.listen = function() {
@@ -28,19 +17,30 @@ module.exports.unlisten = function() {
   return Promise.all([usb.unlisten(), wifi.unlisten()]);
 };
 
-module.exports.detectWifi = () => {
-  return new Promise((resolve, reject) => {
-    nodewifi.init();
-    nodewifi.getCurrentConnections((err, conns) => {
-      if (err) {
-        return reject(err);
-      }
-      if (!conns[0]) {
-        return resolve({});
-      }
-      const { iface, ssid } = conns[0];
-      const host = getInterfaceAddress(iface);
-      resolve({ ssid, host });
-    });
-  });
+function networkAdresses() {
+  return (
+    []
+      .concat(
+        ...Object.entries(os.networkInterfaces()).map(([iface, addresses]) => {
+          return addresses.map(addr => Object.assign({}, addr, { iface }));
+        })
+      )
+      // filter internal
+      .filter(addr => {
+        return !addr.internal;
+      })
+      // filter IPv6
+      .filter(addr => {
+        return addr.family === "IPv4";
+      })
+  );
+}
+
+module.exports.detectWifi = async () => {
+  const [{ iface, address }] = networkAdresses();
+  nodewifi.init({ iface });
+  const [{ ssid }] = await nodewifi.getCurrentConnections();
+  return { ssid, host: address, iface };
 };
+
+module.exports.detectWifi();
