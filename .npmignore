@@ -1,0 +1,7 @@
+.vscode
+Arduino
+examples
+.editorconfig
+.eslintrc
+.gitignore
+yarn.lock
