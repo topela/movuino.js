@@ -1,5 +1,6 @@
 {
   "name": "movuino",
+  "description": "JavaScript library for the Movuino.",
   "version": "1.0.0",
   "engines": {
     "node": ">=7.6.0"
