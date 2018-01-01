@@ -42,5 +42,3 @@ module.exports.detectWifi = async () => {
   const [{ ssid }] = await nodewifi.getCurrentConnections();
   return { ssid, host: address, iface };
 };
-
-module.exports.detectWifi();
