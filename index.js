@@ -6,15 +6,16 @@ const os = require("os");
 const movuinos = require("./lib/movuinos");
 const usb = require("./lib/usb");
 const wifi = require("./lib/wifi");
+const websocket = require("./lib/websocket");
 
 module.exports = movuinos;
 
 module.exports.listen = function() {
-  return Promise.all([usb.listen(), wifi.listen()]);
+  return Promise.all([usb.listen(), wifi.listen(), websocket.listen()]);
 };
 
 module.exports.unlisten = function() {
-  return Promise.all([usb.unlisten(), wifi.unlisten()]);
+  return Promise.all([usb.unlisten(), wifi.unlisten(), websocket.unlisten()]);
 };
 
 function networkAdresses() {
