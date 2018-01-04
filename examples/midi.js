@@ -7,11 +7,17 @@ In this example, acceleration on a specifi axis will trigger a midi note. Cool !
 const movuinojs = require("..");
 // https://github.com/justinlatimer/node-midi
 const midi = require("midi"); // eslint-disable-line node/no-unpublished-require
+// https://github.com/dinchak/node-easymidi
+const easymidi = require("easymidi");
 // https://github.com/danigb/note-parser
 const parseNote = require("note-parser").midi; // eslint-disable-line node/no-unpublished-require
 
-const output = new midi.output(); // eslint-disable-line new-cap
-output.openPort(0);
+function portName() {
+  const output = new midi.output();
+  return output.getPortName(0);
+}
+
+const output = new easymidi.Output(portName());
 
 const velocity = 127; // Midi velocity 0 - 127
 const accelerometerSensitivity = 0.05; // Motion sensitivity 0 - 1
@@ -20,7 +26,10 @@ const gravity = 0.06; // Gravity effect on sensitivity
 const delay = 150; // how much time should we stop listening between each notes
 
 function startNote(note) {
-  output.sendMessage([144, parseNote(note), velocity]);
+  output.send("noteon", {
+    note: parseNote(note),
+    velocity
+  });
 }
 
 function stopNote(note) {
@@ -28,7 +37,10 @@ function stopNote(note) {
   // note on
   // output.sendMessage([144, note, 0]);
   // note off
-  output.sendMessage([128, parseNote(note), 0]);
+  output.send("noteoff", {
+    note: parseNote(note),
+    velocity: 0
+  });
 }
 
 function playNote(note, ms = 200) {
@@ -123,6 +135,6 @@ movuinojs.on("error", err => {
 });
 
 process.on("SIGINT", () => {
-  output.closePort();
+  output.close();
   process.exit(); // eslint-disable-line no-process-exit
 });

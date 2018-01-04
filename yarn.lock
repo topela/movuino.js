@@ -411,6 +411,12 @@ doctrine@^2.0.2:
   dependencies:
     esutils "^2.0.2"
 
+easymidi@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/easymidi/-/easymidi-0.0.4.tgz#bc3fe28c85eea88879704d38bcce57ffde93d9a7"
+  dependencies:
+    midi "^0.9.1"
+
 ecc-jsbn@~0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/ecc-jsbn/-/ecc-jsbn-0.1.1.tgz#0fc73a9ed5f0d53c38193398523ef7e543777505"
@@ -1022,7 +1028,7 @@ lru-cache@^4.0.1:
     pseudomap "^1.0.2"
     yallist "^2.1.2"
 
-midi@^0.9.5:
+midi@^0.9.1, midi@^0.9.5:
   version "0.9.5"
   resolved "https://registry.yarnpkg.com/midi/-/midi-0.9.5.tgz#fc323aff3e81b0d4099caeead535ba679c6e9d88"
   dependencies:
