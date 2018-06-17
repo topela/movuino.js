@@ -13,11 +13,12 @@ const chalk = require("chalk");
 const pkg = require("../package.json");
 
 const table = new Table({
-  head: ["id", "online", "plugged"].map(h => chalk.white.bold(h))
+  head: ["id", "online", "plugged"].map(h => chalk.magenta.bold(h))
 });
 
+program.version(pkg.version);
+
 program
-  .version(pkg.version)
   .command("list")
   .description("list movuinos")
   .action(async () => {
@@ -26,7 +27,7 @@ program
 
     movuinos.forEach(movuino => {
       table.push([
-        chalk.white(movuino.id),
+        chalk.magenta.bold(movuino.id),
         movuino.online ? chalk.green("✔") : chalk.red("✖"),
         movuino.plugged ? chalk.green("✔") : chalk.red("✖")
       ]);
