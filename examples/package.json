@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "dependencies": {
+    "easymidi": "^1.0.1",
+    "midi": "^0.9.5",
+    "note-parser": "^2.0.1",
+    "robotjs": "^0.5.1",
+    "wifi-password": "^3.0.1"
+  }
+}

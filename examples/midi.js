@@ -13,7 +13,7 @@ const easymidi = require("easymidi");
 const parseNote = require("note-parser").midi; // eslint-disable-line node/no-unpublished-require
 
 function portName() {
-  const output = new midi.output();
+  const output = new midi.output(); // eslint-disable-line new-cap
   return output.getPortName(0);
 }
 

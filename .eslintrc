@@ -14,3 +14,9 @@ rules:
   capitalized-comments: 0
   # unicorn https://github.com/sindresorhus/eslint-plugin-unicorn
   unicorn/filename-case: 0
+  # node https://github.com/mysticatea/eslint-plugin-node
+  node/no-unsupported-features: ["error", {
+    "version": 7.6.0,
+    "ignores": []
+  }]
+  node/no-unpublished-require: 0
