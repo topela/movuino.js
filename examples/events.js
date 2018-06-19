@@ -28,9 +28,8 @@ movuinojs.on("movuino", movuino => {
     console.log(movuino.id, "unplugged");
   });
 
-  movuino.on("online", info => {
-    console.log(info);
-    console.log(movuino.id, "online");
+  movuino.on("online", ({ address, port }) => {
+    console.log(movuino.id, "online", `${address}:${port}`);
   });
 
   movuino.on("offline", () => {
