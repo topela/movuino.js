@@ -1,0 +1,26 @@
+{
+  "source": {
+    "include": [
+      "README.md",
+      "lib"
+    ],
+    "includePattern": ".+\\.js(doc)?$",
+    "excludePattern": "(^|\\/|\\\\)_"
+  },
+  "plugins": [
+    "plugins/markdown"
+  ],
+  "opts": {
+    "destination": "./docs",
+    "encoding": "utf8",
+    "projectTitle": "Movuino",
+    "template": "node_modules/jsdoc-template",
+    "includeFunctionsInNav": true,
+    "sort": false
+  },
+  "templates": {
+    "default": {
+      "useLongnameInNav": true
+    }
+  }
+}

@@ -8,6 +8,7 @@
   "repository": "git@github.com:movuino/movuino.js.git",
   "license": "GPL-3.0",
   "scripts": {
+    "doc": "./node_modules/.bin/jsdoc -c conf.json",
     "test": "eslint ."
   },
   "dependencies": {
@@ -28,6 +29,8 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-unicorn": "^4.0.3",
+    "jsdoc": "^3.5.5",
+    "jsdoc-template": "josephlarralde/jsdoc-template",
     "prettier": "^1.13.5"
   }
 }
