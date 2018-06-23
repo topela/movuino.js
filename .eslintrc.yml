@@ -1,16 +1,24 @@
+root: true
+
+parserOptions:
+  sourceType: script
+
 plugins:
   - node
   - unicorn
-  - prettier
+
+env:
+  node: true
 
 extends:
   - eslint:recommended
+  - xo/esnext
   - plugin:unicorn/recommended
   - plugin:node/recommended
-  - xo/esnext
-  - prettier
+  - plugin:prettier/recommended
 
 rules:
+  strict: 2
   capitalized-comments: 0
   # unicorn https://github.com/sindresorhus/eslint-plugin-unicorn
   unicorn/filename-case: 0
