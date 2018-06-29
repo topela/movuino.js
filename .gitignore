@@ -3,5 +3,12 @@
 
 docs/
 node_modules/
+examples/node_modules/
+
+Arduino/Firmware_Sonny
+Arduino/jl-firmware
+
+src/
+
 package-lock.json
 .vscode/c_cpp_properties.json
