@@ -28,7 +28,7 @@ public:
   virtual void update(); // trig the callback or stop if necessary
 
   // this one should be overridden first
-  virtual void callback();
+  virtual void callback() {}
 };
 
 #endif /* _MOVUINO_FIRMWARE_TIMER_H_ */

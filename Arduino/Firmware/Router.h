@@ -44,12 +44,16 @@ private:
   void routeOSCMessage(OSCMessage& msg);
 
   void sendWiFiConnectionMessage(int i);
+  void sendWiFiSettings();
+  void sendAccelGyroRanges();
+  void sendGlobalConfig();
+
   void sendButtonMessage(int i);
   void sendSensorsMessage(float *f);
+  void sendSingleFrame(float *f);
 
   void sendWiFiMessage(OSCMessage& msg);
   void sendSerialMessage(OSCMessage& msg);
-  // void setConfig();
 };
 
 #endif /* _MOVUINO_FIRMWARE_ROUTER_H_ */

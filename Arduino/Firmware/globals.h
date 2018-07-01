@@ -1,23 +1,47 @@
 #ifndef _MOVUINO_FIRMWARE_GLOBALS_H_
 #define _MOVUINO_FIRMWARE_GLOBALS_H_
 
+#define MAX_CONFIG_STRING_SIZE 60
+
 #define MAX_OSC_ADDRESSES 30
-#define MAX_OSC_ADDRESS_LENGTH 30
+#define MAX_OSC_ADDRESS_LENGTH 50
 #define MAX_OSC_STRING_ARG_LENGTH 50
 
+#define DEFAULT_ENABLE_WIFI false
 #define WIFI_CONNECTION_TIMEOUT 15000
 
 #define DEFAULT_OSC_INPUT_PORT 7400
 #define DEFAULT_OSC_OUTPUT_PORT 7401
 
-#define DEFAULT_USE_SERIAL true
-#define DEFAULT_USE_WIFI true
+#define DEFAULT_WEB_SERVER_PORT 80 // not used ATM
+#define DEFAULT_WEBSOCKET_SERVER_PORT 81 // not used ATM
+
+/*
+ * From the MPU6050 library docs :
+ * 0 = +/- 2g
+ * 1 = +/- 4g
+ * 2 = +/- 8g
+ * 3 = +/- 16g
+ */
+#define DEFAULT_ACCEL_RANGE 2 // +/- 8g
+
+/*
+ * From the MPU6050 library docs :
+ * 0 = +/- 250 degrees/sec
+ * 1 = +/- 500 degrees/sec
+ * 2 = +/- 1000 degrees/sec
+ * 3 = +/- 2000 degrees/sec
+ */
+#define DEFAULT_GYRO_RANGE 2 // +/- 1000 degrees/sec
+
+#define DEFAULT_USE_SERIAL true // for sensors, button and vibrator
+#define DEFAULT_SEND_SINGLE_FRAME true // pure UDP, no websocket
 
 #define DEFAULT_READ_MAG_PERIOD 10
 #define DEFAULT_OUTPUT_FRAME_PERIOD 10
+#define DEFAULT_BUTTON_HOLD_DURATION 500
 
 #define BUTTON_BOOT_HOLD_DURATION 1000
-#define BUTTON_SEND_HOLD_DURATION 500
 
 #define LOW_BLINK_PERIOD 200
 #define FAST_BLINK_PERIOD 50
@@ -92,7 +116,7 @@ static char oscAddresses[MAX_OSC_ADDRESSES][MAX_OSC_ADDRESS_LENGTH];
 
 enum oscAddress {
   // input messages
-  oscInputWiFiOnOff = 0,
+  oscInputWiFiEnable = 0,
   oscInputSetWiFi,
   oscInputGetWiFi,
   oscInputSetRange,
@@ -116,19 +140,21 @@ enum oscAddress {
   oscOutputLocalIP,
   oscOutputSensors,
   oscOutputButton,
+  oscOutputFrame
   // oscHeartBeat,
   // oscPing,
 };
 
 static void initOSCAddress(oscAddress a, const char *movuinoId, const char *path) {
-  strcpy(oscAddresses[a], "/");
+  strcpy(oscAddresses[a], "/movuino/");
   strcat(oscAddresses[a], movuinoId);
   strcat(oscAddresses[a], path);
 }
 
 static void initOSCAddresses(const char *movuinoId) {
   // input messages
-  initOSCAddress(oscInputWiFiOnOff, movuinoId, "/wifi/enable");
+  initOSCAddress(oscInputWiFiEnable, movuinoId, "/wifi/enable");
+  // getters / setters
   initOSCAddress(oscInputSetWiFi, movuinoId, "/wifi/set");
   initOSCAddress(oscInputGetWiFi, movuinoId, "/wifi/get");
   initOSCAddress(oscInputSetRange, movuinoId, "/range/set");
@@ -143,6 +169,7 @@ static void initOSCAddresses(const char *movuinoId) {
 
   // output messages
   initOSCAddress(oscOutputWiFiState, movuinoId, "/wifi/state"); // serial, trigger (sysex) => wifi state : 0 (disconnected), 1 (connected), 2 (connecting)
+  // acks for getters / setters
   initOSCAddress(oscOutputSetWiFi, movuinoId, "/wifi/set");
   initOSCAddress(oscOutputGetWiFi, movuinoId, "/wifi/get");
   initOSCAddress(oscOutputSetRange, movuinoId, "/range/set");
@@ -151,9 +178,11 @@ static void initOSCAddresses(const char *movuinoId) {
   initOSCAddress(oscOutputGetConfig, movuinoId, "/config/get");
   initOSCAddress(oscOutputSetAll, movuinoId, "/all/set");
   initOSCAddress(oscOutputGetAll, movuinoId, "/all/get");
+  // actual data
   initOSCAddress(oscOutputLocalIP, movuinoId, "/localIP"); // all, trigger (sysex) => String
   initOSCAddress(oscOutputSensors, movuinoId, "/sensors"); // all, flow => ax, ay, az, gx, gy, gz, mx, my, mz, btn
   initOSCAddress(oscOutputButton, movuinoId, "/button"); // all, trigger (sysex) => 0 (off), 1 (on), 2 (hold)
+  initOSCAddress(oscOutputFrame, movuinoId, "/frame"); // contains sensors, button, vibrating, ip (12 values)
 }
 
 #endif /* _MOVUINO_FIRMWARE_GLOBALS_H_ */

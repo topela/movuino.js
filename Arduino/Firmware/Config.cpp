@@ -17,7 +17,7 @@ Config::init() {
     _movuinoId += String(mac[i], HEX);
   }
 
-  _movuinoId = "movuino-" + _movuinoId;
+  // _movuinoId = "movuino-" + _movuinoId;
   _movuinoId.toCharArray(movuinoId, _movuinoId.length());
 
 }
@@ -35,6 +35,8 @@ Config::load() {
 
     if (strcmp(tmpInitialized, "initialized") != 0) return;
 
+    useWiFi = file.readStringUntil('\n').toInt() > 0;
+
     String _ssid = file.readStringUntil('\n');
     String _password = file.readStringUntil('\n');
     String _hostIP = file.readStringUntil('\n');
@@ -51,11 +53,11 @@ Config::load() {
     gyroRange = file.readStringUntil('\n').toInt();
 
     useSerial = file.readStringUntil('\n').toInt() > 0;
-    useWiFi = file.readStringUntil('\n').toInt() > 0;
     sendSingleFrame = file.readStringUntil('\n').toInt() > 0;
 
     readMagPeriod = file.readStringUntil('\n').toInt();
     outputFramePeriod = file.readStringUntil('\n').toInt();
+    buttonHoldDuration = file.readStringUntil('\n').toInt();
 
     file.close();
   }
@@ -73,6 +75,8 @@ Config::store() {
 
     file.println(initialized);
 
+    file.println(useWiFi ? "1" : "0");
+
     file.println(ssid);
     file.println(password);
     file.println(hostIP);
@@ -83,10 +87,10 @@ Config::store() {
     file.println(gyroRange);
 
     file.println(useSerial ? "1" : "0");
-    file.println(useWiFi ? "1" : "0");
     file.println(sendSingleFrame ? "1" : "0");
     file.println(readMagPeriod);
     file.println(outputFramePeriod);
+    file.println(buttonHoldDuration);
 
     file.close();
   }
@@ -110,6 +114,16 @@ Config::setInitialized(bool b) {
 }
 
 ////////// WIFI SETTINGS
+
+bool
+Config::getUseWiFi() {
+  return useWiFi;
+}
+
+void
+Config::setUseWiFi(bool b) {
+  useWiFi = b;
+}
 
 const char *
 Config::getSsid() {
@@ -214,16 +228,6 @@ Config::setUseSerial(bool b) {
 }
 
 bool
-Config::getUseWiFi() {
-  return useWiFi;
-}
-
-void
-Config::setUseWiFi(bool b) {
-  useWiFi = b;
-}
-
-bool
 Config::getSendSingleFrame() {
   return sendSingleFrame;
 }
@@ -251,4 +255,14 @@ Config::getOutputFramePeriod() {
 void
 Config::setOutputFramePeriod(int p) {
   outputFramePeriod = p;
+}
+
+int
+Config::getButtonHoldDuration() {
+  return buttonHoldDuration;
+}
+
+void
+Config::setButtonHoldDuration(int p) {
+  buttonHoldDuration = p;
 }

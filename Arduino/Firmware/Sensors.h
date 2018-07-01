@@ -24,7 +24,6 @@ public:
 
   virtual ~MagTimer() {}
 
-  virtual void setPeriod(unsigned long p);
   // reads values, then calls sensors->setRawMagValues()
   virtual void callback();
 };
@@ -86,6 +85,9 @@ public:
 
   int getGyroRange();
   void setGyroRange(int r);
+
+  void setReadMagPeriod(int p);
+  void setOutputFramePeriod(int p);
 
 private:
   // only executed by friend class MagTimer

@@ -10,7 +10,7 @@ class Button {
 private:
   bool btnOn;
   bool holding;
-  unsigned long btnPressTimeThresh; // pressure time needed to trig hold event
+  // unsigned long btnPressTimeThresh; // pressure time needed to trig hold event
   unsigned long lastBtnDate;
 
   ButtonState state;
@@ -22,7 +22,7 @@ public:
   Button() :
   btnOn(false),
   holding(false),
-  btnPressTimeThresh(BUTTON_SEND_HOLD_DURATION),
+  // btnPressTimeThresh(DEFAULT_BUTTON_HOLD_DURATION),
   lastBtnDate(0) {}
 
   ~Button() {}

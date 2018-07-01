@@ -79,7 +79,6 @@ WiFiInterface::sendMessage(OSCMessage& msg, const char *hostIP, int portOut) {
     udp.beginPacket(hostIP, portOut); // send message to computer target with "hostIP" on "port"
     msg.send(udp);
     udp.endPacket();
-    msg.empty();
     return true;
   }
 
@@ -89,7 +88,7 @@ WiFiInterface::sendMessage(OSCMessage& msg, const char *hostIP, int portOut) {
 //============================= WIFI CONNECTION ==============================//
 
 bool
-WiFiInterface::getWiFiState() {
+WiFiInterface::isConnected() {
   return WiFi.status() == WL_CONNECTED;
 }
 
@@ -101,7 +100,11 @@ WiFiInterface::startWiFi() {
 
   if (wifiBootMode == WiFiAccessPoint) {
     if (!initialized) {
-      if (WiFi.softAP(config->getMovuinoId(), "")) {
+      char apssid[30];
+      strcpy(apssid, "movuino-");
+      strcat(apssid, config->getMovuinoId());
+
+      if (WiFi.softAP(apssid, "")) {
         initialized = true;
         // digitalWrite(pinLedWifi, LOW); // turn ON wifi led
       } else {
@@ -109,7 +112,7 @@ WiFiInterface::startWiFi() {
         // digitalWrite(pinLedWifi, HIGH); // turn OFF wifi led
       }
     }
-  } else { // wifiBootMode == WiFiStation
+  } else if (config->getUseWiFi()) { // wifiBootMode == WiFiStation
     if (!initialized) {
       WiFi.mode(WIFI_STA);
       initialized = true;
@@ -121,8 +124,11 @@ WiFiInterface::startWiFi() {
     // digitalWrite(pinLedBat, LOW); // turn ON battery led
 
     // this used to be in startConnectionTimer :
-    Timer::start(connectionTimeout);
+    start(connectionTimeout);
     onConnectionEvent(WiFiConnecting);
+  } else {
+    // do nothing except switch off lights because useWiFi is false
+    wifiLight = batLight = false;
   }
 }
 
@@ -130,20 +136,20 @@ WiFiInterface::startWiFi() {
 
 void
 WiFiInterface::stopWiFi() {
+  if (wifiBootMode == WiFiAccessPoint) return; // reboot instead of doing this
+
   if (running) {
     running = false;
   }
 
   if (WiFi.status() == WL_CONNECTED) {
     WiFi.disconnect();
-    // WiFi.mode(WIFI_OFF); // don't use this !
+    WiFi.mode(WIFI_OFF);
     WiFi.forceSleepBegin();
     delay(1);
   }
 
   wifiLight = batLight = false;
-  // digitalWrite(pinLedWifi, HIGH); // turn OFF wifi led
-  // digitalWrite(pinLedBat, HIGH);  // turn OFF battery led
 }
 
 //---------------------------------- AWAKE -----------------------------------//
@@ -190,7 +196,7 @@ WiFiInterface::getStringMacAddress() {
 void
 WiFiInterface::getIPAddress(int *res) { // must be of type int[4]
   // sometimes we get weird ip address values, if it happens again check here :
-  if (getWiFiState()) {
+  if (isConnected()) {
     IPAddress ip = WiFi.localIP();
     for (int i = 0; i < 4; i++) {
       *(res + i) = ip[i];

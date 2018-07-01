@@ -32,9 +32,20 @@ Timer::update() {
 
   // with error compensation (doesn't work ATM, todo: hunt bugs) :
 
-  // unsigned long error = now - (lastDate + nextPeriod);
+  // long error = now - (lastDate + nextPeriod);
 
   // if (error >= 0) {
+  //   if (timeout == 0 || now - startDate < timeout) {
+  //     callback();
+  //   } else {
+  //     stop();
+  //     return;
+  //   }
+
+  //   // recompute in case callback took too long
+  //   now = millis();
+  //   error = now - (lastDate + nextPeriod);
+
   //   if (period > error) {
   //     nextPeriod = period - error;
   //   } else { // // in case the code takes too long to execute, we ignore the error
@@ -42,12 +53,6 @@ Timer::update() {
   //   }
 
   //   lastDate = now;
-
-  //   if (timeout == 0 || now - startDate < timeout) {
-  //     callback();
-  //   } else {
-  //     stop();
-  //   }
   // }
 
   // dumber version :
@@ -62,9 +67,4 @@ Timer::update() {
       stop();
     }
   }
-}
-
-void
-Timer::callback() {
-  // does nothing in the base class
 }

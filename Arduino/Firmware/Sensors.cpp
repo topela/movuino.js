@@ -5,12 +5,6 @@
 
 //================================= TIMER ====================================//
 
-void
-MagTimer::setPeriod(unsigned long p) {
-  // divide by 2 as 1 read operation takes 2 cycles :
-  Timer::setPeriod((int) (p * 0.5));
-}
-
 /**
  * adapted to be non blocking using a state flag
  * from the original sparkun / Jeff Rowberg MPU6050 library:
@@ -41,7 +35,9 @@ MagTimer::callback() {
 
     // reset i2c bypass enable pin as soon as we are done
     // therefore it take a total of (2 * timer period) to read new magnetometer values
-    callback();
+    // callback();
+
+    // or if we don't call callback here, a total of (3 * timer period)
   }
 }
 
@@ -72,6 +68,7 @@ void
 Sensors::update() {
   mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
   updateAccelGyroValues();
+
   readMagTimer->update();
   oscOutTimer->update();
 }
@@ -96,6 +93,16 @@ Sensors::getGyroRange() {
 void
 Sensors::setGyroRange(int r) {
   mpu.setFullScaleGyroRange(r);
+}
+
+void
+Sensors::setReadMagPeriod(int p) {
+  readMagTimer->setPeriod(p);
+}
+
+void
+Sensors::setOutputFramePeriod(int p) {
+  oscOutTimer->setPeriod(p);
 }
 
 //-------------------------------- PRIVATE -----------------------------------//

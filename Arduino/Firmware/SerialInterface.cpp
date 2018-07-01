@@ -42,5 +42,4 @@ SerialInterface::sendMessage(OSCMessage& msg) {
   slip->beginPacket();
   msg.send(*slip);
   slip->endPacket();
-  msg.empty();
 }

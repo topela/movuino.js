@@ -59,8 +59,8 @@ public:
   void stop(); // called back by update when timeout is over
   void callback();
 
-  void setBootMode(WiFiBootMode m);
-  void init(Config *c, Router *r);
+  void setBootMode(WiFiBootMode m); // supposed to be called once at start time
+  void init(Config *c, Router *r); // supposed to be called once at start time
   void update();
 
   void readMessages(/*Router *router*/);
@@ -70,7 +70,7 @@ public:
   void getIPAddress(int *res); // res must be of type int[4]
   String getStringIPAddress();
 
-  bool getWiFiState();
+  bool isConnected();
   void startWiFi();
   void stopWiFi();
   void toggleWiFiState();

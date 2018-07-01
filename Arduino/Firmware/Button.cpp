@@ -7,8 +7,6 @@ void
 Button::init(Config *c, Router *r) {
   config = c;
   router = r;
-  // really implement this ? (and other options ?)
-  // btnPressTimeThresh = config->getButtonHoldThreshold();
 }
 
 void
@@ -24,14 +22,15 @@ Button::update() {
   } else if (!btn && btnOn) {
     btnOn = holding = false;
 
-    // if (now - lastBtnDate > btnPressTimeThresh) {
+    // if (now - lastBtnDate > config->getButtonHoldDuration()) {
     //   // do whatever on buttonRelease after time threshold
     // } else {
     //   // do whatever on buttonRelease before time threshold
     // }
     state = ButtonReleased;
     router->onButtonEvent(state);
-  } else if (btnOn && holding && now - lastBtnDate > btnPressTimeThresh) {
+  } else if (btnOn && holding &&
+             now - lastBtnDate > config->getButtonHoldDuration()) {
     // do whatever on buttonHold until time threshold
     holding = false;
     state = ButtonHolding;
